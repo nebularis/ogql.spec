@@ -294,8 +294,6 @@ with precedence given to the expression(s) on the right (so that the expression
 
 #### Grouping and SubQueries
 
-TODO: WRITE UP THE SPEC FOR SUBQUERIES AND GROUPING........
-
 Because the input to a step is *always* the output of the previous step - with
 the exception of the initial (root) step of the query - the default behaviour
 of a query is produce its output *depth first*. If we use an indentation based
@@ -334,6 +332,10 @@ a:
         n:
             z
 ```
+
+The syntax for a subquery then, is `<target> <- <subquery>`, where both `target`
+and `subquery` are valid queries (or steps).
+
 ----
 
 The order in which vertices are connected is generally the same order in which

@@ -1,13 +1,5 @@
-Navigating Associations with OGQL
----------------------------------
-
-This specification describes an Object Graph Qualification Language.
-This *mini-language* allows you to query The Repository and produce a complex
-object graph from a subset of the associations stored in the repository. The
-language is defined to make it easy to embed queries into a URL.
-
-Specification
-=============
+OGQL Specification
+==================
 
 The document describes the (informal) specification for Object Graph
 Qualification Language (OGQL). OGQL is effectively a search extension that
@@ -176,11 +168,18 @@ in the query, which will now be discussed in more detail.
 
 #### The Implicit Name Predicate
 
-The first and most important step predicate is the *implicit name predicate* which
-is used to filter the edges before further filtering is applied to its constituent
-vertices. This predicate is applied by gathering only associations (the edges of
-our graph) whose association type name (see [[MODEL]]) matches the specified
-string. For example, if we are traversing the following model:
+The first and most important step predicate is the *implicit name predicate*
+which is used to filter the edges before further filtering is applied to its
+constituent vertices. This predicate is applied by gathering only associations
+(the edges of our graph) that somehow match the given name. Because this
+specification is deliberately vague with regards to implementation details,
+the tagging of graph edges could mean various things:
+
+- an in-memory graph might keep a tag field along with the vertices for edges
+- an object model (a la Java/.NET) might use a field/accessor name
+- an rdbms-based implementation might use a column or link/link-table name
+
+In any case, if we are traversing the following model:
 
                   			(stockSupplier)
 	    +----------+ Stock +---------------+ Supplier
@@ -425,7 +424,7 @@ And again in XML format:
 
 In the preceding example, we moved from an *implicit name predicate* to a more
 expressive *Type Name Predicate*, indicating that we're interested in returning
-all objects of type `Term` which are associated with consumer asset nodes of
+all objects of type `Term` which are associated with consumer/right nodes of
 the preceding steps (i.e., any `Term` that is associated with any `Product` in
 the `orderProducts` set *or* any `Service` in the `orderServices` set). We also
 used a filter predicate on the *Type Name*, to limit our results to `Terms`
@@ -551,7 +550,7 @@ The presence of a back-reference to `@varname` is enough to know which kind of
 condition we're evaluating, but we need to know *how* the target of the
 back-reference is related to the consumer nodes in the current set of edges.
 
-Normally the `::` accessor denotes a lookup on either standard asset fields or
+Normally the `::` accessor denotes a lookup on either standard attributes or
 a specific attribute type. In this case however, it is prefixed with a `^`
 which denotes an association type (provided as an instance of an
 *implicit name predicate*). So the condition 
